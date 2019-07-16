@@ -54,7 +54,7 @@ class Raindrop:
         return self.y > (17 + n_strips)  # whether to remove
 
     def render(self, pixels):
-        pixels[(n_strips - 1) - min(n_strips - 1, self.y)][self.x] = (30, 60, 255)
+        pixels[(n_strips - 1) - min(n_strips - 1, self.y)][self.x] = (66, 233, 245)
 
 print('    sending pixels forever (control-c to exit)...')
 print('')

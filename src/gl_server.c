@@ -28,16 +28,17 @@ specific language governing permissions and limitations under the License. */
 #include "opc.h"
 
 opc_source source = -1;
-int verbose = 1;
+int verbose = 0;
 
 // Camera parameters
 #define FOV_DEGREES 20
 int orbiting = 0, dollying = 0;
 double start_angle, start_elevation, start_distance;
 int start_x, start_y;
+double view_center_x, view_center_y, view_center_z = 1.6;
 double orbit_angle = 192.0;  // camera orbit angle, degrees
-double camera_elevation = 30;  // camera elevation angle, degrees
-double camera_distance = 16.0;  // distance from origin, metres
+double camera_elevation = 20;  // camera elevation angle, degrees
+double camera_distance = 12.0;  // distance from origin, metres
 double camera_aspect = 1.0;  // will be updated to match window aspect ratio
 
 // Shape parameters
@@ -200,7 +201,7 @@ void update_camera() {
   glLoadIdentity();
   double camera_y = -cos(camera_elevation*M_PI/180)*camera_distance;
   double camera_z = sin(camera_elevation*M_PI/180)*camera_distance;
-  gluLookAt(0, camera_y, camera_z, /* target */ 0, 0, 0, /* up */ 0, 0, 1);
+  gluLookAt(0, camera_y, camera_z, /* target */ view_center_x, view_center_y, view_center_z, /* up */ 0, 0, 1);
   glRotatef(orbit_angle, 0, 0, 1);
   display();
 }

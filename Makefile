@@ -41,3 +41,6 @@ bin/lpd8806_server: src/lpd8806_server.c src/opc_server.c src/opc.h src/types.h 
 bin/gl_server: src/gl_server.c src/opc_server.c src/opc.h src/types.h src/cJSON.c src/cJSON.h
 	mkdir -p bin
 	gcc ${CFLAGS} -o $@ src/gl_server.c src/opc_server.c src/cJSON.c $(GL_OPTS)
+
+circles: bin/gl_server
+	bin/gl_server -l layouts/circles/layout0.json -l layouts/circles/layout1.json -l layouts/circles/layout2.json -l layouts/circles/layout3.json -l layouts/circles/layout4.json -l layouts/circles/layout5.json -l layouts/circles/layout6.json -l layouts/circles/layout7.json -l layouts/circles/layout8.json -l layouts/circles/layout9.json -l layouts/circles/layout10.json -l layouts/circles/layout11.json -l layouts/circles/layout12.json -l layouts/circles/layout13.json -l layouts/circles/layout14.json -l layouts/circles/layout15.json
