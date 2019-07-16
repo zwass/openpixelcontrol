@@ -28,7 +28,7 @@ specific language governing permissions and limitations under the License. */
 #include "opc.h"
 
 opc_source source = -1;
-int verbose = 0;
+int verbose = 1;
 
 // Camera parameters
 #define FOV_DEGREES 20
@@ -36,14 +36,14 @@ int orbiting = 0, dollying = 0;
 double start_angle, start_elevation, start_distance;
 int start_x, start_y;
 double orbit_angle = 192.0;  // camera orbit angle, degrees
-double camera_elevation = -15;  // camera elevation angle, degrees
+double camera_elevation = 30;  // camera elevation angle, degrees
 double camera_distance = 16.0;  // distance from origin, metres
 double camera_aspect = 1.0;  // will be updated to match window aspect ratio
 
 // Shape parameters
-#define SHAPE_THICKNESS 0.06  // thickness of points and lines, metres
+#define SHAPE_THICKNESS 0.03  // thickness of points and lines, metres
 
-#define MAX_CHANNELS 10
+#define MAX_CHANNELS 20
 int channel_offsets[MAX_CHANNELS];
 int channel_num_pixels[MAX_CHANNELS];
 int num_channels= 0;
@@ -338,7 +338,7 @@ void load_layout(char* filename, int channel) {
   cJSON* start;
   cJSON* x2;
   int i = 0;
-  
+
   buffer = read_file(filename);
   if (buffer == NULL) {
 	  fprintf(stderr, "Unable to open '%s'\n", filename);
@@ -464,6 +464,7 @@ int main(int argc, char** argv) {
   source = opc_new_source(port);
 
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+  glutInitWindowSize(1440, 900);
   glutCreateWindow("OPC");
   glutReshapeFunc(reshape);
   glutDisplayFunc(display);
