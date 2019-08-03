@@ -4,10 +4,8 @@ import math
 import random
 import sys
 
-from colour import Color
-
 import opc
-import color_utils
+from color_utils import Color
 
 
 #-------------------------------------------------------------------------------
@@ -43,27 +41,26 @@ print('')
 
 n_pixels = 150
 
-colors = color_utils.make_gradient(n_pixels, "D1EBFF", "9FE0F7", "83C4E1", "708DA6", "6CB8AE")
 
-dopely143 = color_utils.make_gradient(n_pixels, "125488", "2A93D5", "37CAEC", "3DD9D6", "ADD9D8")
+palette = create_palette(n_pixels)
 
-class Raindrop:
+class Line:
     def __init__(self):
         self.x = random.randrange(0, n_pixels)
-        self.y = 0
         self.speed = random.randrange(0, 55) + 30
         self.tick = 0
-        self.color = random.choice(dopely143)
+        self.color = random.choice(palette)
+        self.direction = random.choice([-1, 1])
 
     def update(self, t_delta):
         self.tick += 1000 * t_delta
         if self.tick > self.speed:
-            self.y += 1
+            self.x = (self.x + self.direction) % n_pixels
             self.tick = 0
-        return self.y > (17 + n_strips)  # whether to remove
 
     def render(self, pixels):
-        pixels[(n_strips - 1) - min(n_strips - 1, self.y)][self.x] = self.color
+        for s in range(n_strips):
+            pixels[s][self.x] = self.color.rgb_255
 
 print('    sending pixels forever (control-c to exit)...')
 print('')
@@ -79,21 +76,20 @@ pixels = []
 for _ in range(n_strips):
     pixels.append(n_pixels * [(0, 0, 0)])
 
-raindrops = []
+lines = []
 for i in range(32):
-    raindrops.append(Raindrop())
+    lines.append(Line())
 
 while True:
-    raindrops.append(Raindrop())
+    lines.append(Line())
     for s in range(n_strips):
         pixels[s] = n_pixels * [(0, 0, 0)]
     t = (time.time() - start_time)
     t_delta = time.time() - t_last
     t_last = time.time()
-    for r in raindrops:
-        r.render(pixels)
-        if r.update(t_delta):
-            raindrops.remove(r)
+    for l in lines:
+        l.update(t_delta)
+        l.render(pixels)
     for p, i in zip(pixels, range(n_strips)):
         client.put_pixels(p, channel=i+1)
     time.sleep(1 / fps)
